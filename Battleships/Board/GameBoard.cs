@@ -64,6 +64,30 @@ namespace Battleships.Board
             return _fields.FirstOrDefault(f => f.Row == row && f.Column == column);
         }
         
+        public void PrintBoard()
+        {
+            var headLine = "    ";
+            for (var column = 0; column < Size; column++)
+            {
+                headLine += column.GetColumnChar() + " ";
+            }
+            
+            Console.WriteLine(headLine);
+            
+            for (var row = 0; row < Size; row++)
+            {
+                var lineToPrint = (row + 1) + (row < 9 ? "   " : "  ");
+            
+                foreach (var field in _fields.Where(f => f.Row == row).OrderBy(f => f.Column))
+                {
+                    var toPrint = field.ShipOnField == null ? "o " : "S ";
+                    lineToPrint += toPrint;
+                }
+            
+                Console.WriteLine(lineToPrint);
+            }
+        }
+        
         // One param size instead of row and columns as we don't plan to play on not square board
         private void InitializeBoard()
         {

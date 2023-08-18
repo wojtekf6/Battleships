@@ -15,6 +15,7 @@ namespace Battleships.Utils
             }
             catch (Exception e)
             {
+                Console.WriteLine("Exception occured during validation: " + e.Message);
                 return false;
             }
         }

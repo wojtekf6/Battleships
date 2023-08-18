@@ -7,5 +7,6 @@ namespace Battleships.Config
         public int BattleshipCount { get; set; }
         public int DestroyerCount { get; set; }
         public int PlacementCollisionOffset { get; set; }
+        public bool Debug { get; set; }
     }
 }
