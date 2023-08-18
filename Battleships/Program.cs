@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Battleships.Board;
+using Battleships.Config;
 
 namespace Battleships
 {
@@ -6,7 +7,12 @@ namespace Battleships
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var config = new GameConfig
+            {
+                BoardSize = 10
+            };
+
+            var board = new GameBoard(config);
         }
     }
 }
