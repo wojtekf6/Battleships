@@ -1,4 +1,4 @@
-namespace Battleships.Exceptions
+namespace Battleships.Exceptions.Board
 {
     public class InvalidBoardSizeException : DomainException
     {

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Battleships.Board;
 using Battleships.Config;
-using Battleships.Exceptions;
+using Battleships.Exceptions.Ship;
 using Battleships.Ships;
 
 namespace Battleships.Services

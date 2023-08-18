@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Battleships.Config;
 using Battleships.Enums;
-using Battleships.Exceptions;
+using Battleships.Exceptions.Board;
+using Battleships.Exceptions.Ship;
 using Battleships.Services;
 using Battleships.Ships;
 using Battleships.Utils;

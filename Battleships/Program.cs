@@ -1,6 +1,7 @@
 ﻿using System;
 using Battleships.Board;
 using Battleships.Config;
+using Battleships.Input;
 using Battleships.Services;
 
 namespace Battleships
@@ -21,6 +22,9 @@ namespace Battleships
 
                 var shipPlacementService = new RandomShipPlacementService(config);
                 var board = new GameBoard(config, shipPlacementService);
+
+                IInputController inputController = new ConsoleInputController(config);
+                var inputData = inputController.GetUserInput();
             }
             catch (Exception e)
             {

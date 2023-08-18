@@ -1,4 +1,4 @@
-namespace Battleships.Exceptions
+namespace Battleships.Exceptions.Ship
 {
     public class ShipOccupiesMaxFieldsException : DomainException
     {

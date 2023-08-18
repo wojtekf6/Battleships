@@ -1,4 +1,4 @@
-using Battleships.Exceptions;
+using Battleships.Exceptions.Board;
 using Battleships.Ships;
 
 namespace Battleships.Board

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Battleships.Board;
-using Battleships.Exceptions;
+using Battleships.Exceptions.Ship;
 
 namespace Battleships.Ships
 {
