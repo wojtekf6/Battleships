@@ -1,4 +1,3 @@
-using System;
 using Battleships.Exceptions;
 using Battleships.Ships;
 

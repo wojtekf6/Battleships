@@ -1,5 +1,7 @@
-﻿using Battleships.Board;
+﻿using System;
+using Battleships.Board;
 using Battleships.Config;
+using Battleships.Services;
 
 namespace Battleships
 {
@@ -7,12 +9,24 @@ namespace Battleships
     {
         static void Main(string[] args)
         {
-            var config = new GameConfig
+            try
             {
-                BoardSize = 10
-            };
+                var config = new GameConfig
+                {
+                    BoardSize = 10,
+                    BattleshipCount = 1,
+                    DestroyerCount = 2,
+                    PlacementCollisionOffset = 1
+                };
 
-            var board = new GameBoard(config);
+                var shipPlacementService = new RandomShipPlacementService(config);
+                var board = new GameBoard(config, shipPlacementService);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Unexpected Exception occured: " + e.Message);
+            }
+            
         }
     }
 }
