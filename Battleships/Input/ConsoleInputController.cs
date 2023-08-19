@@ -41,7 +41,7 @@ namespace Battleships.Input
             }
 
             var column = userInput[0].GetColumnIndex();
-            var row = int.Parse(userInput[1].ToString()) - 1;
+            var row = int.Parse(userInput.Substring(1)) - 1;
 
             return new InputData { Row = row, Column = column };
         }

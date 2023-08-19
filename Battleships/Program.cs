@@ -20,24 +20,19 @@ namespace Battleships
                     PlacementCollisionOffset = 1,
                     Debug = true
                 };
-
+                
+                var inputController = new ConsoleInputController(config);
                 var shipPlacementService = new RandomShipPlacementService(config);
                 var board = new GameBoard(config, shipPlacementService);
-
-                IInputController inputController = new ConsoleInputController(config);
-                var inputData = inputController.GetUserInput();
                 
-                if (config.Debug)
-                {
-                    Console.WriteLine($"Hit: {inputData.Column}{inputData.Row}");
-                    board.PrintBoard();
-                }
+                var game = new Game(config, inputController, board);
+
+                game.Play();
             }
             catch (Exception e)
             {
                 Console.WriteLine("Unexpected Exception occured: " + e.Message);
             }
-            
         }
     }
 }

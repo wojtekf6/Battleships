@@ -13,6 +13,10 @@ namespace Battleships.Board
 {
     public class GameBoard
     {
+        public Action OnShipHit;
+        public Action OnHitMiss;
+        public Action OnShipSink;
+        
         public readonly int Size;
         public readonly List<Ship> Ships = new ();
 
@@ -56,12 +60,40 @@ namespace Battleships.Board
                 fieldToPlaceShip.PlaceShip(ship);
             }
             
+            ship.OnDestroy += ShipDestroyed;
             Ships.Add(ship);
+        }
+        
+        public void Hit(int row, int column)
+        {
+            try
+            {
+                var hitField = GetField(row, column);
+        
+                if (hitField.ShipOnField != null)
+                {
+                    OnShipHit?.Invoke();
+                    hitField.ShipOnField?.Hit(hitField);
+                }
+                else
+                {
+                    OnHitMiss?.Invoke();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
         
         public Field GetField(int row, int column)
         {
-            return _fields.FirstOrDefault(f => f.Row == row && f.Column == column);
+            var field = _fields.FirstOrDefault(f => f.Row == row && f.Column == column);
+            
+            if (field == null)
+                throw new InvalidFieldDataException();
+
+            return field;
         }
         
         public void PrintBoard()
@@ -80,12 +112,20 @@ namespace Battleships.Board
             
                 foreach (var field in _fields.Where(f => f.Row == row).OrderBy(f => f.Column))
                 {
-                    var toPrint = field.ShipOnField == null ? "o " : "S ";
+                    var toPrint = field.ShipOnField == null ? "o " : field.ShipOnField.OccupiedFields.Contains(field) ? "S " : "x ";
                     lineToPrint += toPrint;
                 }
             
                 Console.WriteLine(lineToPrint);
             }
+        }
+        
+        private void ShipDestroyed(Ship ship)
+        {
+            ship.OnDestroy -= ShipDestroyed;
+            Ships.Remove(ship);
+            
+            OnShipSink?.Invoke();
         }
         
         // One param size instead of row and columns as we don't plan to play on not square board
