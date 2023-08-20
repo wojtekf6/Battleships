@@ -31,37 +31,6 @@ namespace Battleships.Board
             
             Size = _config.BoardSize;
             InitializeBoard();
-            CreateShips();
-        }
-        
-        public void CreateShips()
-        {
-            var ships = ShipDataMapperUtils.GetShipsData(_config);
-
-            if (!ships.Any())
-                throw new ShipsDataEmptyException();
-
-            foreach (var ship in ships)
-            {
-                var placementData = _shipPlacementService.GetShipPlacementData(this, ship);
-                PlaceShip(placementData.StartField.Row, placementData.StartField.Column, ship, placementData.Orientation);
-            }
-        }
-        
-        public void PlaceShip(int startRow, int startColumn, Ship ship, Orientation orientation)
-        {
-            for (var i = 0; i < ship.Size; i++)
-            {
-                var fieldToPlaceShip = orientation == Orientation.Horizontal
-                    ? GetField(startRow, startColumn + i)
-                    : GetField(startRow + i, startColumn);
-                
-                ship.AddOccupiedField(fieldToPlaceShip);
-                fieldToPlaceShip.PlaceShip(ship);
-            }
-            
-            ship.OnDestroy += ShipDestroyed;
-            Ships.Add(ship);
         }
         
         public void Hit(int row, int column)
@@ -118,6 +87,36 @@ namespace Battleships.Board
             
                 Console.WriteLine(lineToPrint);
             }
+        }
+        
+        public void CreateShips()
+        {
+            var ships = ShipDataMapperUtils.GetShipsData(_config);
+
+            if (!ships.Any())
+                throw new ShipsDataEmptyException();
+
+            foreach (var ship in ships)
+            {
+                var placementData = _shipPlacementService.GetShipPlacementData(this, ship);
+                PlaceShip(placementData.StartField.Row, placementData.StartField.Column, ship, placementData.Orientation);
+            }
+        }
+        
+        private void PlaceShip(int startRow, int startColumn, Ship ship, Orientation orientation)
+        {
+            for (var i = 0; i < ship.Size; i++)
+            {
+                var fieldToPlaceShip = orientation == Orientation.Horizontal
+                    ? GetField(startRow, startColumn + i)
+                    : GetField(startRow + i, startColumn);
+                
+                ship.AddOccupiedField(fieldToPlaceShip);
+                fieldToPlaceShip.PlaceShip(ship);
+            }
+            
+            ship.OnDestroy += ShipDestroyed;
+            Ships.Add(ship);
         }
         
         private void ShipDestroyed(Ship ship)

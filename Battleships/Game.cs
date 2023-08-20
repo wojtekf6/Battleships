@@ -24,18 +24,14 @@ namespace Battleships
             
             SetUpBoard();
         }
-        
-        public void SetUpBoard()
-        {
-            _board.OnShipHit += OnShipHit;
-            _board.OnHitMiss += OnHitMiss;
-            _board.OnShipSink += OnShipSink;
-        }
 
         public void Play()
         {
             Console.WriteLine("Start game!");
-            _board.PrintBoard();
+            
+            if (_config.Debug)
+                _board.PrintBoard();
+            
             IsGameInProgress = true;
             
             while (IsGameInProgress)
@@ -53,6 +49,15 @@ namespace Battleships
                     _board.PrintBoard();
                 }
             }
+        }
+        
+        private void SetUpBoard()
+        {
+            _board.CreateShips();
+            
+            _board.OnShipHit += OnShipHit;
+            _board.OnHitMiss += OnHitMiss;
+            _board.OnShipSink += OnShipSink;
         }
         
         private void OnShipHit()

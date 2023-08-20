@@ -32,7 +32,7 @@ namespace Battleships.Input
             return inputData;
         }
         
-        private InputData ParseUserInput(string userInput)
+        protected InputData ParseUserInput(string userInput)
         {
             if (!Regex.IsMatch(userInput, InputUtils.GetInputPattern(_config.BoardSize))
                 || !InputUtils.ValidateMaxSize(userInput, _config.BoardSize))
