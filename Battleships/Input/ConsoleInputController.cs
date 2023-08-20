@@ -34,6 +34,11 @@ namespace Battleships.Input
         
         protected InputData ParseUserInput(string userInput)
         {
+            if (string.IsNullOrWhiteSpace(userInput))
+                throw new InvalidInputException();
+
+            userInput = userInput.ToUpper();
+            
             if (!Regex.IsMatch(userInput, InputUtils.GetInputPattern(_config.BoardSize))
                 || !InputUtils.ValidateMaxSize(userInput, _config.BoardSize))
             {

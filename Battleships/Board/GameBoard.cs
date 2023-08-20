@@ -38,16 +38,20 @@ namespace Battleships.Board
             try
             {
                 var hitField = GetField(row, column);
-        
+
+                if (hitField.IsHit)
+                    throw new FieldAlreadyHit();
+
                 if (hitField.ShipOnField != null)
                 {
                     OnShipHit?.Invoke();
-                    hitField.ShipOnField?.Hit(hitField);
                 }
                 else
                 {
                     OnHitMiss?.Invoke();
                 }
+                
+                hitField.Hit();
             }
             catch (Exception e)
             {
@@ -81,7 +85,12 @@ namespace Battleships.Board
             
                 foreach (var field in _fields.Where(f => f.Row == row).OrderBy(f => f.Column))
                 {
-                    var toPrint = field.ShipOnField == null ? "o " : field.ShipOnField.OccupiedFields.Contains(field) ? "S " : "x ";
+                    var toPrint = !field.IsHit ? "o " : field.ShipOnField != null ? "S " : "x ";
+                    
+                    // Display ship as "s" in debug mode if not Hit 
+                    if (_config.Debug && !field.IsHit && field.ShipOnField != null)
+                        toPrint = "s ";
+                    
                     lineToPrint += toPrint;
                 }
             

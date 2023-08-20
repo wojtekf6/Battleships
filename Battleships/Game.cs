@@ -14,6 +14,7 @@ namespace Battleships
         private readonly GameConfig _config;
         
         private GameBoard _board;
+        private int _hitCounter = 0;
 
         public Game(GameConfig config, IInputController input, GameBoard board)
         {
@@ -28,9 +29,16 @@ namespace Battleships
         public void Play()
         {
             Console.WriteLine("Start game!");
+            Console.WriteLine("Instruction:");
+            Console.WriteLine("Input data in proper format to Hit ship e.g. 'A5'");
+            Console.WriteLine("o - field not hit");
+            Console.WriteLine("S - ship hit");
+            Console.WriteLine("x - hit miss");
             
             if (_config.Debug)
-                _board.PrintBoard();
+                Console.WriteLine("ONLY FOR DEBUG MODE: s - ship on field");
+            
+            _board.PrintBoard();
             
             IsGameInProgress = true;
             
@@ -40,14 +48,16 @@ namespace Battleships
 
                 if (inputData == null)
                     continue;
-                
+
+                _hitCounter++;
                 _board.Hit(inputData.Row, inputData.Column);
 
                 if (_config.Debug)
                 {
                     Console.WriteLine($"Hit: {inputData.Column}{inputData.Row}");
-                    _board.PrintBoard();
                 }
+                
+                _board.PrintBoard();
             }
         }
         
@@ -89,6 +99,7 @@ namespace Battleships
             _board.OnShipSink += OnShipSink;
             
             Console.WriteLine("END GAME");
+            Console.WriteLine("Hits: " + _hitCounter);
             IsGameInProgress = false;
         }
 

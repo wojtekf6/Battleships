@@ -18,7 +18,7 @@ namespace Battleships
                     BattleshipCount = 1,
                     DestroyerCount = 2,
                     PlacementCollisionOffset = 1,
-                    Debug = true
+                    Debug = false
                 };
                 
                 var inputController = new ConsoleInputController(config);
