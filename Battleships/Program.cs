@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Battleships.Board;
-using Battleships.Config;
 using Battleships.Input;
 using Battleships.Services;
+using Battleships.Utils;
 using Microsoft.Extensions.Logging;
 
 namespace Battleships
 {
     class Program
     {
-        static void Main(string[] args)
+        private const string ConfigFileName = "config.json";
+        
+        static async Task Main(string[] args)
         {
             using var loggerFactory = LoggerFactory.Create(builder =>
             {
@@ -23,7 +26,7 @@ namespace Battleships
             
             try
             {
-                var config = CreateGameConfig();
+                var config = await ConfigUtils.LoadConfig(ConfigFileName);
                 var inputController = new ConsoleInputController(config, loggerFactory);
                 var shipPlacementService = new RandomShipPlacementService(config);
                 var board = new GameBoard(config, loggerFactory, shipPlacementService);
@@ -36,19 +39,6 @@ namespace Battleships
             {
                 logger.LogError("Unexpected Exception occured: " + e.Message);
             }
-        }
-
-        static GameConfig CreateGameConfig()
-        {
-            //TODO: Read from .json file / AzureConfig
-            return new GameConfig
-            {
-                BoardSize = 10,
-                BattleshipCount = 1,
-                DestroyerCount = 2,
-                PlacementCollisionOffset = 1,
-                Debug = true
-            };
         }
     }
 }

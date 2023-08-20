@@ -1,6 +1,6 @@
 namespace Battleships.Config
 {
-    public class GameConfig
+    public record GameConfig
     {
         // Should board size be configurable?
         public int BoardSize { get; set; } = 10;
