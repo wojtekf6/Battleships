@@ -3,16 +3,19 @@ using System.Text.RegularExpressions;
 using Battleships.Config;
 using Battleships.Exceptions.Input;
 using Battleships.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace Battleships.Input
 {
     public class ConsoleInputController : IInputController
     {
         private readonly GameConfig _config;
+        private readonly ILogger _logger;
         
-        public ConsoleInputController(GameConfig config)
+        public ConsoleInputController(GameConfig config, ILoggerFactory loggerFactory)
         {
             _config = config;
+            _logger = loggerFactory.CreateLogger<ConsoleInputController>();
         }
         
         public InputData GetUserInput()
@@ -26,7 +29,7 @@ namespace Battleships.Input
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _logger.LogError(e.Message);
             }
 
             return inputData;

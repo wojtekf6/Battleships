@@ -8,7 +8,7 @@ using NUnit.Framework;
 namespace Battleships.Tests
 {
     [TestFixture]
-    public class GameTest
+    public class GameTest : BaseTestFixture
     {
         private IInputController _input;
         private GameConfig _gameConfig;
@@ -16,8 +16,9 @@ namespace Battleships.Tests
         private GameBoard _gameBoard;
 
         [SetUp]
-        public void Setup()
+        public override void Setup()
         {
+            base.Setup();
             _gameConfig = new GameConfig
             {
                 BoardSize = 10,
@@ -25,16 +26,16 @@ namespace Battleships.Tests
                 DestroyerCount = 2,
                 Debug = false
             };
-            
-            _input = new TestInputController(_gameConfig, "A5");
+
+            _input = new TestInputController(_gameConfig, LoggerFactory, "A5");
             _shipPlacementService = new RandomShipPlacementService(_gameConfig);
-            _gameBoard = new GameBoard(_gameConfig, _shipPlacementService);
+            _gameBoard = new GameBoard(_gameConfig, LoggerFactory, _shipPlacementService);
         }
         
         [Test]
         public void SetUpBoard_SubscribesToBoardEvents()
         {
-            var game = new Game(_gameConfig, _input, _gameBoard);
+            var game = new Game(_gameConfig, LoggerFactory, _input, _gameBoard);
 
             Assert.NotNull(_gameBoard.OnShipHit);
             Assert.NotNull(_gameBoard.OnHitMiss);

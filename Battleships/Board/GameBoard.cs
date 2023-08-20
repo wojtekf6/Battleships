@@ -8,6 +8,7 @@ using Battleships.Exceptions.Ship;
 using Battleships.Services;
 using Battleships.Ships;
 using Battleships.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace Battleships.Board
 {
@@ -22,11 +23,13 @@ namespace Battleships.Board
 
         private readonly List<Field> _fields = new ();
         private readonly GameConfig _config;
+        private readonly ILogger _logger;
         private readonly ShipPlacementService _shipPlacementService;
 
-        public GameBoard(GameConfig config, ShipPlacementService shipPlacementService)
+        public GameBoard(GameConfig config, ILoggerFactory loggerFactory, ShipPlacementService shipPlacementService)
         {
             _config = config;
+            _logger = loggerFactory.CreateLogger<GameBoard>();
             _shipPlacementService = shipPlacementService;
             
             Size = _config.BoardSize;
@@ -55,7 +58,7 @@ namespace Battleships.Board
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+                _logger.LogError(e.Message);
             }
         }
         
@@ -71,14 +74,16 @@ namespace Battleships.Board
         
         public void PrintBoard()
         {
+            var boardToPrint = "";
+            
             var headLine = "    ";
             for (var column = 0; column < Size; column++)
             {
                 headLine += column.GetColumnChar() + " ";
             }
-            
-            Console.WriteLine(headLine);
-            
+
+            boardToPrint += headLine + Environment.NewLine;
+
             for (var row = 0; row < Size; row++)
             {
                 var lineToPrint = (row + 1) + (row < 9 ? "   " : "  ");
@@ -94,8 +99,10 @@ namespace Battleships.Board
                     lineToPrint += toPrint;
                 }
             
-                Console.WriteLine(lineToPrint);
+                boardToPrint += lineToPrint + Environment.NewLine;
             }
+            
+            Console.WriteLine(boardToPrint);
         }
         
         public void CreateShips()

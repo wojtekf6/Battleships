@@ -3,6 +3,7 @@ using System.Linq;
 using Battleships.Board;
 using Battleships.Config;
 using Battleships.Input;
+using Microsoft.Extensions.Logging;
 
 namespace Battleships
 {
@@ -12,16 +13,19 @@ namespace Battleships
         
         private readonly IInputController _input;
         private readonly GameConfig _config;
+        private readonly ILogger _logger;
         
         private GameBoard _board;
         private int _hitCounter = 0;
 
-        public Game(GameConfig config, IInputController input, GameBoard board)
+        public Game(GameConfig config, ILoggerFactory loggerFactory, IInputController input, GameBoard board)
         {
-            Console.WriteLine("Creating Game...");
             _config = config;
+            _logger = loggerFactory.CreateLogger<Game>();
             _input = input;
             _board = board;
+            
+            _logger.LogInformation("Creating Game...");
             
             SetUpBoard();
         }
@@ -54,7 +58,7 @@ namespace Battleships
 
                 if (_config.Debug)
                 {
-                    Console.WriteLine($"Hit: {inputData.Column}{inputData.Row}");
+                    _logger.LogInformation($"Hit: {inputData.Column}{inputData.Row}");
                 }
                 
                 _board.PrintBoard();
@@ -72,17 +76,17 @@ namespace Battleships
         
         private void OnShipHit()
         {
-            Console.WriteLine("HIT!");
+            _logger.LogInformation("HIT!");
         }
         
         private void OnHitMiss()
         {
-            Console.WriteLine("Miss...");
+            _logger.LogInformation("Miss...");
         }
         
         private void OnShipSink()
         {
-            Console.WriteLine("...and SINK!");
+            _logger.LogInformation("...and SINK!");
             CheckGameState();
         }
         
@@ -98,10 +102,9 @@ namespace Battleships
             _board.OnHitMiss += OnHitMiss;
             _board.OnShipSink += OnShipSink;
             
-            Console.WriteLine("END GAME");
-            Console.WriteLine("Hits: " + _hitCounter);
+            _logger.LogInformation("END GAME");
+            _logger.LogInformation("Hits: " + _hitCounter);
             IsGameInProgress = false;
         }
-
     }
 }

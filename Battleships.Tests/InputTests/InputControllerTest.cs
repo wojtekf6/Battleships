@@ -6,13 +6,14 @@ using NUnit.Framework;
 namespace Battleships.Tests.InputTests
 {
     [TestFixture]
-    public class InputControllerTest
+    public class InputControllerTest : BaseTestFixture
     {
         private GameConfig _config;
 
         [SetUp]
-        public void Setup()
+        public override void Setup()
         {
+            base.Setup();
             _config = new GameConfig
             {
                 BoardSize = 10
@@ -26,7 +27,7 @@ namespace Battleships.Tests.InputTests
         [TestCase("d2", 1, 3)]
         public void GetUserInput_ProperData(string input, int exRow, int exColumn)
         {
-            var inputController = new TestInputController(_config, input);
+            var inputController = new TestInputController(_config, LoggerFactory, input);
 
             var result = inputController.GetUserInput();
 
@@ -43,7 +44,7 @@ namespace Battleships.Tests.InputTests
         {
             Assert.Throws<InvalidInputException>(delegate
             {
-                var inputController = new TestInputController(_config, input);
+                var inputController = new TestInputController(_config, LoggerFactory, input);
                 inputController.GetUserInput();
             });
         }

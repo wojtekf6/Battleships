@@ -10,14 +10,15 @@ using NUnit.Framework;
 namespace Battleships.Tests.BoardTests
 {
     [TestFixture]
-    public class GameBoardTest
+    public class GameBoardTest : BaseTestFixture
     {
         private ShipPlacementService _shipPlacementService;
         private GameConfig _gameConfig;
 
         [SetUp]
-        public void Setup()
+        public override void Setup()
         {
+            base.Setup();
             _gameConfig = new GameConfig
             {
                 BoardSize = 10,
@@ -27,11 +28,11 @@ namespace Battleships.Tests.BoardTests
             };
             _shipPlacementService = new RandomShipPlacementService(_gameConfig);
         }
-        
+
         [Test]
         public void CreateBoard_CheckBoard()
         {
-            var gameBoard = new GameBoard(_gameConfig, _shipPlacementService);
+            var gameBoard = new GameBoard(_gameConfig, LoggerFactory, _shipPlacementService);
 
             Assert.NotNull(gameBoard.GetField(0, 0));
             Assert.NotNull(gameBoard.GetField(_gameConfig.BoardSize-1, _gameConfig.BoardSize-1));
@@ -50,7 +51,7 @@ namespace Battleships.Tests.BoardTests
                     DestroyerCount = 2
                 };
                 
-                var gameBoard = new GameBoard(config, _shipPlacementService);
+                var gameBoard = new GameBoard(config, LoggerFactory, _shipPlacementService);
             });
         }
         
@@ -60,7 +61,7 @@ namespace Battleships.Tests.BoardTests
         {
             Assert.Throws<InvalidFieldDataException>(delegate
             {
-                var gameBoard = new GameBoard(_gameConfig, _shipPlacementService);
+                var gameBoard = new GameBoard(_gameConfig, LoggerFactory, _shipPlacementService);
                 gameBoard.GetField(row, column);
             });
         }
@@ -77,7 +78,7 @@ namespace Battleships.Tests.BoardTests
                     DestroyerCount = 0
                 };
                 
-                var gameBoard = new GameBoard(config, _shipPlacementService);
+                var gameBoard = new GameBoard(config, LoggerFactory, _shipPlacementService);
                 gameBoard.CreateShips();
             });
         }
@@ -85,7 +86,7 @@ namespace Battleships.Tests.BoardTests
         [Test]
         public void CreateShips_AddsShipsToBoard()
         {
-            var gameBoard = new GameBoard(_gameConfig, _shipPlacementService);
+            var gameBoard = new GameBoard(_gameConfig, LoggerFactory, _shipPlacementService);
             gameBoard.CreateShips();
             
             var battleships = gameBoard.Ships.Count(ship => ship is Battleship);
@@ -98,7 +99,7 @@ namespace Battleships.Tests.BoardTests
         [Test]
         public void Hit_HitsShip()
         {
-            var gameBoard = new GameBoard(_gameConfig, _shipPlacementService);
+            var gameBoard = new GameBoard(_gameConfig, LoggerFactory, _shipPlacementService);
             gameBoard.CreateShips();
             var ship = gameBoard.Ships.First();
             var hitField = ship.OccupiedFields.First();

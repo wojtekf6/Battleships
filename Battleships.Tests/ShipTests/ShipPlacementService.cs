@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Battleships.Tests.ShipTests
 {
     [TestFixture]
-    public class ShipPlacementServiceTests
+    public class ShipPlacementServiceTests : BaseTestFixture
     {
         [Test]
         public void CalculateAvailableFields_NoCollisions_ReturnsCorrectPositions()
@@ -20,7 +20,7 @@ namespace Battleships.Tests.ShipTests
             };
 
             var shipPlacementService = new TestShipPlacementService(config);
-            var gameBoard = new GameBoard(config, shipPlacementService);
+            var gameBoard = new GameBoard(config, LoggerFactory, shipPlacementService);
             var ship = new TestShip(2);
             
             var expectedPositions = new List<PlacementData>
@@ -54,7 +54,7 @@ namespace Battleships.Tests.ShipTests
             // S o o o
             
             var shipPlacementService = new TestShipPlacementService(config);
-            var gameBoard = new GameBoard(config, shipPlacementService);
+            var gameBoard = new GameBoard(config, LoggerFactory, shipPlacementService);
             gameBoard.CreateShips();
 
             var ship = new Destroyer();
@@ -76,7 +76,7 @@ namespace Battleships.Tests.ShipTests
                 { StartField = new Field(0, 0), Orientation = Orientation.Vertical };
             
             var shipPlacementService = new TestShipPlacementService(config);
-            var gameBoard = new GameBoard(config, shipPlacementService);
+            var gameBoard = new GameBoard(config, LoggerFactory, shipPlacementService);
             var ship = new TestShip(2);
             
             var placementData = shipPlacementService.GetShipPlacementData(gameBoard, ship);

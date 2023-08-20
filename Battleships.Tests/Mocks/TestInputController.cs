@@ -1,5 +1,6 @@
 using Battleships.Config;
 using Battleships.Input;
+using Microsoft.Extensions.Logging;
 
 namespace Battleships.Tests.Mocks
 {
@@ -7,7 +8,7 @@ namespace Battleships.Tests.Mocks
     {
         private string TestInput { get; }
         
-        public TestInputController(GameConfig config, string testInput) : base(config)
+        public TestInputController(GameConfig config, ILoggerFactory loggerFactory, string testInput) : base(config, loggerFactory)
         {
             TestInput = testInput;
         }
