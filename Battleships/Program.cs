@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using Battleships.Board;
 using Battleships.Input;
@@ -26,7 +27,9 @@ namespace Battleships
             
             try
             {
-                var config = await ConfigUtils.LoadConfig(ConfigFileName);
+                var configFilePath = Path.Join(AppDomain.CurrentDomain.BaseDirectory, ConfigFileName);
+                var config = await ConfigUtils.LoadConfig(configFilePath);
+                
                 var inputController = new ConsoleInputController(config, loggerFactory);
                 var shipPlacementService = new RandomShipPlacementService(config);
                 var board = new GameBoard(config, loggerFactory, shipPlacementService);
